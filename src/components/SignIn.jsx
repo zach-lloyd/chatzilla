@@ -7,7 +7,7 @@ function SignIn() {
     const [password, setPassword] = useState('');
     const { 
         BASE_URL, 
-        handleAuthentication,
+        setIsAuthenticated,
         updateUser
     } = useContext(MessengerContext);
     
@@ -34,7 +34,7 @@ function SignIn() {
             console.log('Sign in success:', data);
             // The response might include the created user object. 
             // If Devise is sending a session cookie, your browser has it now (assuming same domain or correct CORS).
-            handleAuthentication(true);
+            setIsAuthenticated(true);
             updateUser(data);
         } else {
             // If it fails validation or password mismatch, etc.

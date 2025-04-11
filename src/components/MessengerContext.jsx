@@ -7,25 +7,20 @@ export const MessengerProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
 
-    function handleAuthentication(authenticated) {
-        setIsAuthenticated(authenticated);
-    } 
-
     function updateUser(userData) {
         setUser(userData);
     }
 
     return (
         <MessengerContext.Provider value={{ 
-        BASE_URL, 
-        isAuthenticated, 
-        setIsAuthenticated,
-        handleAuthentication, 
-        user, 
-        setUser,
-        updateUser 
+            BASE_URL, 
+            isAuthenticated, 
+            setIsAuthenticated,
+            user, 
+            setUser,
+            updateUser 
         }}>
-        {children}
+            {children}
         </MessengerContext.Provider>
     );
 };
