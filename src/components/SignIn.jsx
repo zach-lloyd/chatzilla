@@ -32,10 +32,12 @@ function SignIn() {
         if (response.ok) {
             const data = await response.json();
             console.log('Sign in success:', data);
+            console.log('SignIn: Calling updateUser with:', data); 
             // The response might include the created user object. 
             // If Devise is sending a session cookie, your browser has it now (assuming same domain or correct CORS).
-            setIsAuthenticated(true);
             updateUser(data);
+            console.log('SignIn: Calling setIsAuthenticated(true)');
+            setIsAuthenticated(true);
         } else {
             // If it fails validation or password mismatch, etc.
             const errorData = await response.json();
