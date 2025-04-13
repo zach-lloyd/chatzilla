@@ -4,7 +4,6 @@ import { MessengerContext } from '../components/MessengerContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MainLayout() {
-  console.log("here");
   const { BASE_URL, user, setUser, setIsAuthenticated } = useContext(MessengerContext); 
   console.log('MainLayout Render - User from context:', user); 
 
@@ -38,9 +37,8 @@ function MainLayout() {
     <div className="container-fluid d-flex flex-column p-0 m-0 min-vh-100">
       <header className="p-3 bg-light d-flex justify-content-between align-items-center">
         <div>
-          <span className="me-3">Logged in as: <strong>{user?.email}</strong></span>
-          {user && user.email ? (
-            <span className="me-3">Logged in as: <strong>{user.email}</strong></span>
+          {user && user.email && user.username ? (
+            <span className="me-3">Logged in as: <strong>{user.username}</strong></span>
           ) : (
             <span className="me-3 text-danger">User or Email missing</span> 
           )}

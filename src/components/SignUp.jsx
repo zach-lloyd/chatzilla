@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 function SignUp() {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const { 
@@ -23,6 +24,7 @@ function SignUp() {
             body: JSON.stringify({
                 user: {
                     email,
+                    username,
                     password,
                     password_confirmation: passwordConfirmation
                 }
@@ -55,6 +57,15 @@ function SignUp() {
                     placeholder="Email" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
+                />
+            </div>
+            <div className="mb-3">
+                <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder="Username" 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)} 
                 />
             </div>
             <div className="mb-3">
