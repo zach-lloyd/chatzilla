@@ -57,6 +57,7 @@ function SignUp() {
                     placeholder="Email" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
+                    required
                 />
             </div>
             <div className="mb-3">
@@ -66,6 +67,7 @@ function SignUp() {
                     placeholder="Username" 
                     value={username} 
                     onChange={(e) => setUsername(e.target.value)} 
+                    required
                 />
             </div>
             <div className="mb-3">
@@ -75,6 +77,7 @@ function SignUp() {
                     placeholder="Password" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
+                    required
                 />
             </div>
             <div className="mb-3">
@@ -84,6 +87,7 @@ function SignUp() {
                     placeholder="Confirm Password" 
                     value={passwordConfirmation} 
                     onChange={(e) => setPasswordConfirmation(e.target.value)}
+                    required
                 />
             </div>
             <button onClick={handleSignUp} className="btn btn-primary w-100">Sign Up</button>
