@@ -5,14 +5,17 @@ import { Link } from "react-router-dom";
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState([]);
     const { 
         BASE_URL, 
         setIsAuthenticated,
-        updateUser
+        updateUser,
+        processErrors
     } = useContext(MessengerContext);
     
 
     const handleSignIn = async () => {
+        setErrors([]); // Clear out any existing errors
         const response = await fetch(`${BASE_URL}/users/sign_in`, {
             method: 'POST',
             headers: {
@@ -42,13 +45,23 @@ function SignIn() {
             // If it fails validation or password mismatch, etc.
             const errorData = await response.json();
             console.error('Sign in error:', errorData);
-            alert(JSON.stringify(errorData));
+            const statements = processErrors(errorData);
+            setErrors(statements);
         }
     };
 
     return (
         <div className="card p-4 shadow-sm">
             <h2 className="card-title mb-4">Sign In</h2>
+            {errors.length > 0 && (
+                 <ul className="text-danger mb-3">
+                    {
+                        errors.map((statement, index) => (
+                            <li key={index}>{statement}</li>
+                        ))
+                    }
+                </ul>
+            )}
             <div className="mb-3">
                 <input 
                     type="text" 

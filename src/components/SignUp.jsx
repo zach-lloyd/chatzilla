@@ -7,13 +7,16 @@ function SignUp() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [errors, setErrors] = useState([]);
     const { 
         BASE_URL, 
         setIsAuthenticated,
-        updateUser
+        updateUser,
+        processErrors
     } = useContext(MessengerContext);
 
     const handleSignUp = async () => {
+        setErrors([]); // Clear out any existing errors
         const response = await fetch(`${BASE_URL}/users`, {
             method: 'POST',
             headers: {
@@ -43,13 +46,24 @@ function SignUp() {
             // If it fails validation or password mismatch, etc.
             const errorData = await response.json();
             console.error('Sign up error:', errorData);
-            alert(JSON.stringify(errorData));
+            console.log(JSON.stringify(errorData));
+            const statements = processErrors(errorData);
+            setErrors(statements);
         }
     };
 
     return (
         <div className="card p-4 shadow-sm">
             <h2 className="card-title mb-4">Sign Up</h2>
+            {errors.length > 0 && (
+                 <ul className="text-danger mb-3">
+                    {
+                        errors.map((statement, index) => (
+                            <li key={index}>{statement}</li>
+                        ))
+                    }
+                </ul>
+            )}
             <div className="mb-3">
                 <input 
                     type="text" 
