@@ -13,7 +13,7 @@ function RoomPage() {
         const fetchRoomData = async () => {
             setLoading(true);
             setError(null);
-            const url = `<span class="math-inline">${BASE_URL}/rooms/</span>${roomId}`;
+            const url = `${BASE_URL}/rooms/${roomId}`;
             console.log(`Workspaceing room data from: ${url}`);
 
             try {

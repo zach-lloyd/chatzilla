@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { MessengerContext } from './MessengerContext';
+import { useNavigate } from 'react-router-dom';
 
 function CreateRoomForm() {
     const [roomName, setRoomName] = useState("");
@@ -9,36 +10,44 @@ function CreateRoomForm() {
     const { 
         BASE_URL, 
     } = useContext(MessengerContext);
+    const navigate = useNavigate();
 
     const handleRoomCreation = async () => {
-        const response = await fetch(`${BASE_URL}/rooms`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                room: {
-                    name: roomName,
-                    description: roomDescription,
-                    public: isPublic,
-                }
-            }),
-            credentials: 'include'
-        });
+        const url = `${BASE_URL}/rooms`;
+        const payload = { room: { name: roomName, description: roomDescription, public: isPublic } };
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Room successfully created:', data);
-            // The response might include the created room object. 
-            // If Devise is sending a session cookie, your browser has it now (assuming same domain or correct CORS).
-        } else {
-            // If it fails validation, etc.
-            const errorData = await response.json();
-            console.error('Error creating room:', errorData);
-            console.log(JSON.stringify(errorData));
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(payload),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const data = await response.json(); // data should be the created room object { id: ..., name: ..., ... }
+                console.log('Room successfully created:', data);
+
+                // --- Navigate to the new room's page ---
+                if (data && data.id) {
+                    console.log(`Navigating to /rooms/${data.id}`);
+                    navigate(`/rooms/${data.id}`); // <-- Use navigate
+                } else {
+                    console.error("Created room data missing ID:", data);
+                }
+                // ---
+
+                // No need to clear form here as we are navigating away
+            } else {
+                const errorData = await response.json();
+                console.error(`Error creating room (${response.status}):`, errorData);
+                alert(`Error: ${JSON.stringify(errorData)}`);
+            }
+        } catch (error) {
+            console.error("Network error creating room:", error);
+            alert(`Network error: ${error.message}`);
         }
-    }
+    };
 
     return (
         <div>
