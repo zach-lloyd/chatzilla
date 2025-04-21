@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Outlet } from 'react-router-dom'; 
 import { MessengerContext } from '../components/MessengerContext'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NavPanel from "../components/NavPanel";
 
 function MainLayout() {
   const { BASE_URL, user, setUser, setIsAuthenticated } = useContext(MessengerContext); 
@@ -37,6 +38,7 @@ function MainLayout() {
     <div className="container-fluid d-flex flex-column p-0 m-0 min-vh-100">
       <header className="p-3 bg-light d-flex justify-content-between align-items-center">
         <div>
+          <NavPanel />
           {user && user.email && user.username ? (
             <span className="me-3">Logged in as: <strong>{user.username}</strong></span>
           ) : (

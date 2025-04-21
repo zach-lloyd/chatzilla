@@ -6,6 +6,7 @@ class Room < ApplicationRecord
   # --- Membership Associations ---
   has_many :memberships, dependent: :destroy # Room's memberships
   has_many :users, through: :memberships    # Users who are members of the room
+  has_many :messages, dependent: :destroy
   
   validates :name, presence: true
 end

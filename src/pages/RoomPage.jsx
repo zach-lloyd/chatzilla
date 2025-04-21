@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { MessengerContext } from '../components/MessengerContext'; 
+import SubmitButton from "../assets/send.png";
 
 function RoomPage() {
     const { roomId } = useParams(); 
@@ -8,6 +9,7 @@ function RoomPage() {
     const [room, setRoom] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [messageText, setMessageText] = useState("");
 
     useEffect(() => {
         const fetchRoomData = async () => {
@@ -43,6 +45,10 @@ function RoomPage() {
         fetchRoomData();
     }, [roomId, BASE_URL]); // Re-fetch if roomId or BASE_URL changes
 
+    function submitMessage(msg) {
+        
+    }
+
     if (loading) {
         return <div>Loading room...</div>;
     }
@@ -76,7 +82,17 @@ function RoomPage() {
                 <p>No members found (or data format incorrect).</p>
             )}
 
-            {/* TODO: Add message display area */}
+            <input 
+                type="text" 
+                placeholder="Tell the room what's on your mind..." 
+                value={messageText} 
+                onChange={(e) => setMessageText(e.target.value)} 
+            />
+            <img 
+                src={SubmitButton} 
+                alt="An arrow button that, when clicked, posts your message to the room" 
+                onClick={() => submitMessage(MessageText)}
+            />
             {/* TODO: Add message input form */}
         </div>
     );

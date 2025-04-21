@@ -40,7 +40,7 @@ class RoomsController < ApplicationController
       # ---
 
       # Render the room and its associated users as JSON
-      render json: @room, include: { users: { only: [:id, :username] } } # Example: Only include id and username for users
+      render json: @room, include: { users: { only: [:id, :username] } } 
 
     rescue ActiveRecord::RecordNotFound
       render json: { error: 'Room not found' }, status: :not_found
