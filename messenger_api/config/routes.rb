@@ -14,8 +14,12 @@ Rails.application.routes.draw do
   end
 
   resources :messages, only: [:create]
+
+  resources :memberships, only: [:create, :destroy]
   
   get "up" => "rails/health#show", as: :rails_health_check
+
+  mount ActionCable.server => '/cable'
 
   # Defines the root path route ("/")
   # root "posts#index"

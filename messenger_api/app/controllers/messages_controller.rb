@@ -16,6 +16,18 @@ class MessagesController < ApplicationController
     @message = @room.messages.build(message_params.merge(user: current_user))
 
     if @message.save
+      # --- Broadcast the message ---
+      RoomChannel.broadcast_to(
+        @room,
+        # Send data that the frontend can use to render the message
+        { id: @message.id,
+          body: @message.body,
+          created_at: @message.created_at, 
+          user: { id: @message.user.id, username: @message.user.username } # Include author info
+        }
+      )
+      # ---
+      
       render json: @message, status: :created
     else
       render json: @message.errors, status: :unprocessable_entity
