@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { MessengerContext } from '../components/MessengerContext'; 
 import SubmitButton from "../assets/send.png";
@@ -14,40 +14,41 @@ function RoomPage() {
     const [messageText, setMessageText] = useState("");
     const subscriptionRef = useRef(null);
 
-    useEffect(() => {
-        const fetchRoomData = async () => {
-            setLoading(true);
-            setError(null);
-            const url = `${BASE_URL}/rooms/${roomId}`;
-            console.log(`Workspaceing room data from: ${url}`);
+    const fetchRoomData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        const url = `${BASE_URL}/rooms/${roomId}`;
+        console.log(`Workspaceing room data from: ${url}`); 
 
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' },
-                    credentials: 'include' 
-                });
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                credentials: 'include'
+            });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log("Received room data:", data);
-                    setRoom(data);
-                    setMessages(data.messages || []);
-                } else {
-                    const errorData = await response.json();
-                    console.error(`Error fetching room (${response.status}):`, errorData);
-                    setError(errorData.error || `Failed to load room (status: ${response.status})`);
-                }
-            } catch (err) {
-                console.error("Network error fetching room:", err);
-                setError(`Network error: ${err.message}`);
-            } finally {
-                setLoading(false);
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Received room data:", data);
+                setRoom(data);
+                setMessages(data.messages || []);
+            } else {
+                const errorData = await response.json();
+                console.error(`Error fetching room (${response.status}):`, errorData);
+                setError(errorData.error || `Failed to load room (status: ${response.status})`);
             }
-        };
+        } catch (err) {
+            console.error("Network error fetching room:", err);
+            setError(`Network error: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
+    }, [roomId, BASE_URL]); 
 
-        fetchRoomData();
-    }, [roomId, BASE_URL]); // Re-fetch if roomId or BASE_URL changes
+    // Effect for initial data load
+    useEffect(() => {
+        fetchRoomData(); // Call the memoized function
+    }, [fetchRoomData]);
 
     // Effect for Action Cable subscription
     useEffect(() => {
@@ -141,6 +142,12 @@ function RoomPage() {
 
     const joinRoom = async () => {
         const url = `${BASE_URL}/memberships`;
+        // Ensure user and roomId are available before attempting to join
+        if (!user || !roomId) {
+            console.error("User or Room ID missing, cannot join room.");
+            alert("Cannot join room at this time.");
+            return;
+        }
         const payload = { membership: { user_id: user.id, room_id: roomId } };
 
         try {
@@ -152,8 +159,10 @@ function RoomPage() {
             });
 
             if (response.ok) {
-                const data = await response.json(); // data should be the created membership object 
+                const data = await response.json();
                 console.log('Room successfully joined:', data);
+                // 2. Call fetchRoomData again to update the UI
+                fetchRoomData(); // <-- REFETCH DATA
             } else {
                 const errorData = await response.json();
                 console.error(`Error joining room (${response.status}):`, errorData);
@@ -163,7 +172,7 @@ function RoomPage() {
             console.error("Network error joining room:", error);
             alert(`Network error: ${error.message}`);
         }
-    }
+    };
 
     if (loading) {
         return <div>Loading room...</div>;
@@ -177,6 +186,9 @@ function RoomPage() {
         return <div>Room not found.</div>; // Should ideally be handled by error state
     }
 
+    const isMember = user && Array.isArray(room?.users) && room.users.some(member => member.id === user.id);
+    const canViewMessages = room?.public || isMember;
+
     return (
         <div>
             <h1>{room.name}</h1>
@@ -189,7 +201,6 @@ function RoomPage() {
             {/* Check if room.users exists and is an array */}
             {Array.isArray(room.users) && room.users.length > 0 ? (
                 <ul>
-                    {/* Make sure your backend includes users with at least 'id' and 'username' */}
                     {room.users.map(user => (
                         <li key={user.id}>{user.username || `User ${user.id}`}</li>
                     ))}
@@ -200,14 +211,7 @@ function RoomPage() {
 
             {/* --- Message Display Area --- */}
             <div style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
-                {(
-                    // Check if room exists and is public
-                    room?.public ||
-                    // OR check if user exists, room.users is an array, AND the user's ID is found in the room.users array
-                    (user && Array.isArray(room?.users) && room.users.some(member => member.id === user.id))
-                    // The ?. optional chaining prevents errors if room or room.users is initially null/undefined
-                    // Array.isArray ensures .some() is only called on an actual array
-                ) ? (
+                {canViewMessages ? (
                     // --- JSX to display messages (if authorized) ---
                     <> 
                         <h2>Messages</h2>
@@ -232,25 +236,37 @@ function RoomPage() {
                     !loading && room ? (
                         <>
                             <h2>You are not authorized to view messages. Join the room or ensure it's public.</h2>
-                            <button onClick={joinRoom}>Join Room</button>
+                            {/* Only show Join button if NOT already a member */}
+                            {!isMember && <button onClick={joinRoom}>Join Room</button>}
                         </>
                     ) : null // Don't show anything during load or if room doesn't exist
                 )}
             </div>
             {/* --- --- */}
 
-            <input 
-                type="text" 
-                placeholder="Tell the room what's on your mind..." 
-                value={messageText} 
-                onChange={(e) => setMessageText(e.target.value)} 
-            />
-            <button onClick={submitMessage} type="button"> 
-                <img
-                    src={SubmitButton}
-                    alt="Send message" // More concise alt text
-                />
-            </button>
+            {isMember ? ( // Show input only if user is a member
+                <div>
+                    <input 
+                        type="text" 
+                        placeholder="Tell the room what's on your mind..." 
+                        value={messageText} 
+                        onChange={(e) => setMessageText(e.target.value)} 
+                    />
+                    <button onClick={submitMessage} type="button"> 
+                        <img
+                            src={SubmitButton}
+                            alt="Send message" // More concise alt text
+                        />
+                    </button>
+                </div>
+            ) : (
+                // Show Join button again here if needed, or maybe just rely on the one above
+                // Depending on your desired layout, you might only need one Join button.
+                // If the room is public but user isn't a member, show Join button?
+                !loading && room && !isMember && (
+                     <button onClick={joinRoom}>Join Room</button>
+                )
+            )}
         </div>
     );
 }
