@@ -141,7 +141,7 @@ function RoomPage() {
     }
 
     const joinRoom = async () => {
-        const url = `${BASE_URL}/memberships`;
+        const url = `${BASE_URL}/rooms/${roomId}/membership`;
         // Ensure user and roomId are available before attempting to join
         if (!user || !roomId) {
             console.error("User or Room ID missing, cannot join room.");
@@ -171,6 +171,53 @@ function RoomPage() {
         } catch (error) {
             console.error("Network error joining room:", error);
             alert(`Network error: ${error.message}`);
+        }
+    };
+
+    const leaveRoom = async () => {
+        if (!window.confirm('Are you sure you want to leave this room?')) {
+            return; // Stop if user cancels
+        }
+    
+        const url = `${BASE_URL}/rooms/${roomId}/membership`;
+        console.log(`Attempting to DELETE membership at: ${url}`);
+    
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json'
+                    // 'Content-Type' is usually not needed for DELETE requests without a body
+                },
+                credentials: 'include' 
+            });
+    
+            // Handle Success (Status 204 No Content is expected)
+            if (response.ok || response.status === 204) {
+                console.log('Successfully left the room.');
+                // --- Update UI: Refetch room data ---
+                // This will update the 'room' state, causing the component
+                // to re-render, hide messages/input, and show the "Join Room" button again.
+                fetchRoomData();
+            } else {
+                // Handle Errors (e.g., 404 Not Found, 403 Forbidden)
+                let errorData = { error: `Failed to leave room (status: ${response.status})` }; // Default error
+                try {
+                    // Try to parse error JSON, but handle cases where body might be empty/non-JSON
+                     if (response.headers.get("content-type")?.includes("application/json")) {
+                         errorData = await response.json();
+                     }
+                } catch (parseError) {
+                    console.error("Could not parse error response:", parseError);
+                }
+                console.error(`Error leaving room (${response.status}):`, errorData);
+                // Use setError state or alert
+                 setError(errorData.error || `Failed to leave room (status: ${response.status})`);
+            }
+        } catch (error) {
+            // Handle Network Errors
+            console.error("Network error leaving room:", error);
+            setError(`Network error: ${error.message}`);
         }
     };
 
@@ -235,9 +282,7 @@ function RoomPage() {
                     // (Avoid showing this during initial loading state)
                     !loading && room ? (
                         <>
-                            <h2>You are not authorized to view messages. Join the room or ensure it's public.</h2>
-                            {/* Only show Join button if NOT already a member */}
-                            {!isMember && <button onClick={joinRoom}>Join Room</button>}
+                            <h2>You are not authorized to view messages. Join the room to view messages.</h2>
                         </>
                     ) : null // Don't show anything during load or if room doesn't exist
                 )}
@@ -258,6 +303,7 @@ function RoomPage() {
                             alt="Send message" // More concise alt text
                         />
                     </button>
+                    <button onClick={leaveRoom}>Leave Room</button>
                 </div>
             ) : (
                 // Show Join button again here if needed, or maybe just rely on the one above

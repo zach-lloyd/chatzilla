@@ -11,12 +11,11 @@ Rails.application.routes.draw do
 
   resources :rooms, only: [:create, :index, :show] do
     resources :messages, only: [:create, :index]
+    resource :membership, only: [:create, :destroy]
   end
 
   resources :messages, only: [:create]
 
-  resources :memberships, only: [:create, :destroy]
-  
   get "up" => "rails/health#show", as: :rails_health_check
 
   mount ActionCable.server => '/cable'
