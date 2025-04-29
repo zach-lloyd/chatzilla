@@ -235,6 +235,7 @@ GEM
     rake (13.2.1)
     rdoc (6.13.1)
       psych (>= 4.0.0)
+    redis (4.8.1)
     regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
@@ -339,6 +340,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.2)
+  redis (~> 4.0)
   rubocop-rails-omakase
   solid_cable
   solid_cache

@@ -11,6 +11,8 @@ function RoomPage() {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    // Track the array of user IDs that are currently “online”
+    const [onlineUserIds, setOnlineUserIds] = useState([]);
     const [messageText, setMessageText] = useState("");
     const subscriptionRef = useRef(null);
 
@@ -50,7 +52,7 @@ function RoomPage() {
         fetchRoomData(); // Call the memoized function
     }, [fetchRoomData]);
 
-    // Effect for Action Cable subscription
+    // Effect for Action Cable room subscription
     useEffect(() => {
         if (!roomId) return; // Don't subscribe if roomId isn't available yet
 
@@ -107,6 +109,27 @@ function RoomPage() {
         };
 
     }, [roomId]); // Re-run effect if roomId changes
+
+    // Subscribe to Prsence channel
+    useEffect(() => {
+        const consumer = getConsumer();  
+        const presenceSub = consumer.subscriptions.create(
+          { channel: "PresenceChannel" },
+          {
+            connected() {
+              console.log("Connected to PresenceChannel");
+            },
+            received(data) {
+              // data.online_user_ids is the array we broadcast from Rails
+              setOnlineUserIds(data.online_user_ids);
+            }
+          }
+        );
+      
+        return () => {
+          presenceSub.unsubscribe();
+        };
+    }, []); 
 
     const submitMessage = async () => {
         if (messageText.trim() === '') {
@@ -235,6 +258,9 @@ function RoomPage() {
 
     const isMember = user && Array.isArray(room?.users) && room.users.some(member => member.id === user.id);
     const canViewMessages = room?.public || isMember;
+    const allMembers = Array.isArray(room.users) ? room.users : [];
+    const onlineMembers  = allMembers.filter(u => onlineUserIds.includes(u.id));
+    const offlineMembers = allMembers.filter(u => !onlineUserIds.includes(u.id));
 
     return (
         <div>
@@ -244,16 +270,28 @@ function RoomPage() {
 
             <hr />
 
-            <h2>Members ({room.users?.length || 0})</h2>
-            {/* Check if room.users exists and is an array */}
-            {Array.isArray(room.users) && room.users.length > 0 ? (
+            <h2>Members ({allMembers.length})</h2>
+
+            <h3>Online ({onlineMembers.length})</h3>
+            {onlineMembers.length > 0 ? (
                 <ul>
-                    {room.users.map(user => (
-                        <li key={user.id}>{user.username || `User ${user.id}`}</li>
+                    {onlineMembers.map(u => (
+                        <li key={u.id}>{u.username || `User ${u.id}`}</li>
                     ))}
                 </ul>
             ) : (
-                <p>No members found (or data format incorrect).</p>
+                <p>No one is online right now.</p>
+            )}
+
+            <h3>Offline ({offlineMembers.length})</h3>
+            {offlineMembers.length > 0 ? (
+                <ul>
+                    {offlineMembers.map(u => (
+                        <li key={u.id}>{u.username || `User ${u.id}`}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p>Everyone’s online!</p>
             )}
 
             {/* --- Message Display Area --- */}

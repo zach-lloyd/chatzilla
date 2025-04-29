@@ -47,3 +47,4 @@ group :development, :test do
 end
 
 gem "devise" 
+gem 'redis', '~> 4.0'
