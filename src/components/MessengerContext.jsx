@@ -12,6 +12,21 @@ export const MessengerProvider = ({ children }) => {
         setUser(userData);
     }, []);
 
+    const togglePresence = async () => {
+        if (!user) return;
+        try {
+          const resp = await fetch(`${BASE_URL}/users/${user.id}/toggle_presence`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'      
+          });
+          const data = await resp.json();
+          setUser(u => ({ ...u, presence: data.presence }));
+        } catch (err) {
+          console.error("Error toggling presence:", err);
+        }
+    };
+
     function processErrors(errorData) {
         let statements = []; // Initialize an empty array for error messages
 
@@ -53,7 +68,8 @@ export const MessengerProvider = ({ children }) => {
             user, 
             setUser,
             updateUser,
-            processErrors 
+            processErrors,
+            togglePresence
         }}>
             {children}
         </MessengerContext.Provider>

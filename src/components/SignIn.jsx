@@ -26,7 +26,8 @@ function SignIn() {
             body: JSON.stringify({
                 user: {
                     email,
-                    password
+                    password,
+                    presence: true
                 }
             }),
             credentials: 'include'

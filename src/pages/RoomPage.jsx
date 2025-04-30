@@ -110,7 +110,7 @@ function RoomPage() {
 
     }, [roomId]); // Re-run effect if roomId changes
 
-    // Subscribe to Prsence channel
+    // Subscribe to Presence channel
     useEffect(() => {
         const consumer = getConsumer();  
         const presenceSub = consumer.subscriptions.create(
@@ -121,6 +121,7 @@ function RoomPage() {
             },
             received(data) {
               // data.online_user_ids is the array we broadcast from Rails
+              console.log("⚡ PresenceChannel received:", data.online_user_ids);
               setOnlineUserIds(data.online_user_ids);
             }
           }
@@ -129,7 +130,7 @@ function RoomPage() {
         return () => {
           presenceSub.unsubscribe();
         };
-    }, []); 
+    }, [roomId]); 
 
     const submitMessage = async () => {
         if (messageText.trim() === '') {

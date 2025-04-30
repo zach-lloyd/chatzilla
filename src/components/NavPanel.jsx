@@ -8,10 +8,9 @@ import RightArrow from "../assets/right-arrow.png";
 import LeftArrow from "../assets/left-arrow.png";
 
 function NavPanel() {
-    const { user } = useContext(MessengerContext); 
+    const { user, togglePresence } = useContext(MessengerContext); 
 
     const [selectedTab, setSelectedTab] = useState("Rooms");
-    const [online, setOnline] = useState(true);
     const [hidden, setHidden] = useState(true);
     const [showRoomModal, setShowRoomModal] = useState(false);
 
@@ -34,8 +33,8 @@ function NavPanel() {
                 {selectedTab === "Rooms" ? (
                     <h2 onClick={() => setShowRoomModal(true)}>Create New Room</h2>
                 ) : (
-                    <h2 onClick={() => setOnline(!online)}>
-                        {online ? "Disable Presence" : "Enable Presence"}
+                    <h2 onClick={ togglePresence }>
+                        { user.presence ? "Disable Presence" : "Enable Presence" }
                     </h2>
                 )}
 
