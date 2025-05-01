@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { MessengerContext } from './components/MessengerContext';
 import RoomPage from './pages/RoomPage';
+import UserPage from './pages/UserPage';
 
 // Layouts
 import AuthLayout from './layouts/AuthLayout';
@@ -50,6 +51,7 @@ const routes = [
     children: [
       { path: '/', element: <HomePage /> }, 
       { path: 'rooms/:roomId', element: <RoomPage /> },
+      { path: 'users/:userId', element: <UserPage />}
     ],
   },
 ];

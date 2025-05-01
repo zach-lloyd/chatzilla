@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:toggle_presence]
+  before_action :set_user, only: [:toggle_presence, :show]
 
   def index
     @users = User.all
@@ -14,6 +14,10 @@ class UsersController < ApplicationController
     end
 
     render json: users_data
+  end
+
+  def show
+    render json: @user
   end
 
   def toggle_presence

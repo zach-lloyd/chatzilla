@@ -41,8 +41,12 @@ function ItemList({ type }) {
         <ul>
         {
             type === "users" ? (
-                items.map(user => <li key={user.id}>{user.username}</li>)
-            ) : type === "rooms" ? (
+                items.map(user => 
+                <li key={user.id}>
+                    <Link to={`/users/${user.id}`}>
+                        {user.username}
+                    </Link></li>
+            )) : type === "rooms" ? (
                 items.map(room => (
                     <li key={room.id}>
                         <Link to={`/rooms/${room.id}`}>
