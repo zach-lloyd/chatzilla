@@ -16,6 +16,8 @@ function RoomPage() {
     const [messageText, setMessageText] = useState("");
     const subscriptionRef = useRef(null);
 
+    console.log(`User presence enabled: ${user.presence}`);
+
     const fetchRoomData = useCallback(async () => {
         setLoading(true);
         setError(null);

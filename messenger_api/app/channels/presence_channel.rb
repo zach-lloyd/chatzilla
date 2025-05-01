@@ -25,12 +25,12 @@ class PresenceChannel < ApplicationCable::Channel
     stream_from "presence"
 
     # Push an updated list to everyone
-    broadcast_online_users
+    self.class.broadcast_online_users
   end
 
   def unsubscribed
     # Remove the user’s ID when they disconnect
     $redis.srem(ONLINE_SET_KEY, current_user.id)    
-    broadcast_online_users
+    self.class.broadcast_online_users
   end
 end
