@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { MessengerContext } from '../components/MessengerContext'; 
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function UserPage() {
     const { userId } = useParams();
@@ -96,6 +97,18 @@ function UserPage() {
     return (
         <>
             <h1>{selectedUser.username}</h1>
+            <h2>Room Memberships</h2>
+            {Array.isArray(selectedUser.rooms) && selectedUser.rooms.length > 0 ? (
+            <ul>
+                {selectedUser.rooms.map(room => (
+                <li key={room.id}>
+                    <Link to={`/rooms/${room.id}`}>{room.name}</Link>
+                </li>
+                ))}
+            </ul>
+            ) : (
+            <p>This user isn’t a member of any rooms yet.</p>
+            )}
             {
                 user.id === selectedUser.id ? 
                 <button onClick={deleteAccount}>Delete Account</button> :

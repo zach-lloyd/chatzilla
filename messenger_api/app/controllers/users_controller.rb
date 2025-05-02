@@ -17,7 +17,14 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: @user
+    # eager-load rooms to avoid N+1
+    @user = User.includes(:rooms).find(params[:id])
+    render json: @user.as_json(
+      only:   [:id, :username, :presence],
+      include: {
+        rooms: { only: [:id, :name] }
+      }
+    )
   end
 
   def toggle_presence
