@@ -6,7 +6,7 @@ import { getConsumer, disconnectConsumer } from '../services/cable'; // <-- Impo
 
 function RoomPage() {
     const { roomId } = useParams(); 
-    const { BASE_URL, user } = useContext(MessengerContext);
+    const { BASE_URL, user, csrfToken } = useContext(MessengerContext);
     const [room, setRoom] = useState(null);
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -146,7 +146,11 @@ function RoomPage() {
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Accept': 'application/json',
+                    'X-CSRF-Token': csrfToken 
+                },
                 body: JSON.stringify(payload),
                 credentials: 'include'
             });
@@ -179,7 +183,11 @@ function RoomPage() {
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Accept': 'application/json',
+                    'X-CSRF-Token': csrfToken 
+                },
                 body: JSON.stringify(payload),
                 credentials: 'include'
             });
@@ -212,7 +220,8 @@ function RoomPage() {
             const response = await fetch(url, {
                 method: 'DELETE',
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-CSRF-Token': csrfToken
                     // 'Content-Type' is usually not needed for DELETE requests without a body
                 },
                 credentials: 'include' 

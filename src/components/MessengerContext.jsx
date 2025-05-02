@@ -1,4 +1,4 @@
-import React, { createContext, useState, useCallback } from 'react';
+import React, { createContext, useState, useCallback, useEffect } from 'react';
 
 export const MessengerContext = createContext();
 
@@ -6,6 +6,17 @@ export const MessengerProvider = ({ children }) => {
     const BASE_URL = 'http://localhost:3000';
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+    const [csrfToken, setCsrfToken] = useState(null);
+
+    useEffect(() => {
+        const fetchCsrf = async () => {
+            const res = await fetch(`${BASE_URL}/csrf-token`, { credentials: "include" });
+            const { csrfToken } = await res.json();
+            setCsrfToken(csrfToken);
+            window.CSRF_TOKEN = csrfToken;
+        };
+        fetchCsrf();
+    }, [BASE_URL]);
 
     const updateUser = useCallback((userData) => {
         console.log("Context: updateUser called. Calling setUser with:", userData); 
@@ -17,7 +28,10 @@ export const MessengerProvider = ({ children }) => {
         try {
           const resp = await fetch(`${BASE_URL}/users/${user.id}/toggle_presence`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
             credentials: 'include'      
           });
           const data = await resp.json();
@@ -69,7 +83,8 @@ export const MessengerProvider = ({ children }) => {
             setUser,
             updateUser,
             processErrors,
-            togglePresence
+            togglePresence,
+            csrfToken
         }}>
             {children}
         </MessengerContext.Provider>

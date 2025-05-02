@@ -9,6 +9,7 @@ function CreateRoomForm() {
     const DESCRIPTION_LENGTH = 300;
     const { 
         BASE_URL, 
+        csrfToken
     } = useContext(MessengerContext);
     const navigate = useNavigate();
 
@@ -19,7 +20,11 @@ function CreateRoomForm() {
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Accept': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
                 body: JSON.stringify(payload),
                 credentials: 'include'
             });

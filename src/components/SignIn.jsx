@@ -10,7 +10,8 @@ function SignIn() {
         BASE_URL, 
         setIsAuthenticated,
         updateUser,
-        processErrors
+        processErrors,
+        csrfToken
     } = useContext(MessengerContext);
     
 
@@ -20,7 +21,8 @@ function SignIn() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-CSRF-Token': csrfToken
             },
             // Devise expects params in the shape: { user: { email, password, ... } }
             body: JSON.stringify({

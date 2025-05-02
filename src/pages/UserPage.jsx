@@ -1,13 +1,50 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { MessengerContext } from '../components/MessengerContext'; 
+import { useNavigate } from 'react-router-dom';
 
 function UserPage() {
     const { userId } = useParams();
-    const { BASE_URL, user } = useContext(MessengerContext);
+    const { 
+        BASE_URL, 
+        user, 
+        csrfToken,
+        setUser,
+        setIsAuthenticated 
+    } = useContext(MessengerContext);
     const [selectedUser, setSelectedUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const deleteAccount = async () => {
+        if (!window.confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+          return;
+        }
+      
+        try {
+          const res = await fetch(`${BASE_URL}/users`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+              'X-CSRF-Token': csrfToken,         
+              'Accept':       'application/json'
+            }
+          });
+      
+          if (res.ok) {
+            console.log("Account deleted");
+            setUser(null);
+            setIsAuthenticated(false);
+            navigate("/sign_up"); 
+          } else {
+            const err = await res.json();
+            alert(`Failed to delete account: ${err.error || err}`);
+          }
+        } catch (err) {
+          alert(`Network error: ${err.message}`);
+        }
+    } 
 
     const fetchUserData = useCallback(async () => {
         setLoading(true);
@@ -61,7 +98,7 @@ function UserPage() {
             <h1>{selectedUser.username}</h1>
             {
                 user.id === selectedUser.id ? 
-                <button>Delete Account</button> :
+                <button onClick={deleteAccount}>Delete Account</button> :
                 <></>
             }
         </>
