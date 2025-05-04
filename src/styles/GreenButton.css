@@ -1,0 +1,11 @@
+.btn-monster {
+    color:            #fff;
+    background-color: #7AC142;
+    border-color:     #7AC142;
+}
+
+.btn-monster:hover,
+.btn-monster:focus {
+    background-color: #69a336;
+    border-color:     #60902e;
+}

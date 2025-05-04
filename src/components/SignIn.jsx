@@ -83,7 +83,7 @@ function SignIn() {
                     onChange={(e) => setPassword(e.target.value)} 
                 />
             </div>
-            <button onClick={handleSignIn} className="btn btn-primary w-100">Sign In</button>
+            <button onClick={handleSignIn} className="btn btn-monster w-100">Sign In</button>
             <p>First time user?</p>
             <Link to="/sign_up">Sign Up</Link>
         </div>

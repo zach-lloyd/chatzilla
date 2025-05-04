@@ -106,7 +106,7 @@ function SignUp() {
                     required
                 />
             </div>
-            <button onClick={handleSignUp} className="btn btn-primary w-100">Sign Up</button>
+            <button onClick={handleSignUp} className="btn btn-monster w-100">Sign Up</button>
             <p>Already signed up?</p>
             <Link to="/sign_in">Sign In</Link>
         </div>
