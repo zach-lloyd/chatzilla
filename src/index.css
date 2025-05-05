@@ -26,7 +26,6 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
   min-height: 100vh;
 }
 
@@ -73,7 +72,8 @@ html, body, #root {
   height: 100%;
   margin: 0;
   background-color: #1f0131;  
-  color: #fff;                
+  color: #fff;  
+  width: 100%;              
 }
 
 .card {

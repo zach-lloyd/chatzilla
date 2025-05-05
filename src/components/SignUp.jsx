@@ -55,7 +55,7 @@ function SignUp() {
     };
 
     return (
-        <div className="card p-4 shadow-sm">
+        <div className="card p-4 shadow-sm w-100 w-md-75 mt-5">
             <h2 className="card-title mb-4">Sign Up</h2>
             {errors.length > 0 && (
                  <ul className="text-danger mb-3">
@@ -107,8 +107,10 @@ function SignUp() {
                 />
             </div>
             <button onClick={handleSignUp} className="btn btn-monster w-100">Sign Up</button>
-            <p>Already signed up?</p>
-            <Link to="/sign_in">Sign In</Link>
+            <div className="d-flex gap-2">
+                <p>Already joined?</p>
+                <Link className="text-custom-green" to="/sign_in">Sign In</Link>
+            </div>
         </div>
     );
 }

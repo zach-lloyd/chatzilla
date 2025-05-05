@@ -54,7 +54,7 @@ function SignIn() {
     };
 
     return (
-        <div className="card p-4 shadow-sm">
+        <div className="card p-4 shadow-sm w-100 h-sm-100 w-md-75 mt-5">
             <h2 className="card-title mb-4">Sign In</h2>
             {errors.length > 0 && (
                  <ul className="text-danger mb-3">
@@ -84,8 +84,10 @@ function SignIn() {
                 />
             </div>
             <button onClick={handleSignIn} className="btn btn-monster w-100">Sign In</button>
-            <p>First time user?</p>
-            <Link to="/sign_up">Sign Up</Link>
+            <div className="d-flex gap-2">
+                <p>First time user?</p>
+                <Link className="text-custom-green" to="/sign_up">Sign Up</Link>
+            </div>
         </div>
     );
 }
