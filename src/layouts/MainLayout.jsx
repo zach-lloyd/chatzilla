@@ -36,7 +36,7 @@ function MainLayout() {
 
   return (
     <div className="container-fluid d-flex flex-column p-0 m-0 min-vh-100">
-      <header className="p-3 bg-light d-flex justify-content-between align-items-center">
+      <header className="p-0 d-flex justify-content-between align-items-center">
         <div>
           <NavPanel />
           {user && user.email && user.username ? (
