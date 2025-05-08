@@ -15,6 +15,8 @@ function NavPanel() {
     const [hidden, setHidden] = useState(true);
     const [showRoomModal, setShowRoomModal] = useState(false);
 
+    console.log("selected: ", selectedTab)
+
     return (
         <div style={{backgroundColor: hidden ? "#1f0131" : "#402468" }}>
             <img 
@@ -30,7 +32,7 @@ function NavPanel() {
             />
             
             <Offcanvas
-                show={hidden}
+                show={!hidden}
                 onHide={() => setHidden(!hidden)}
                 placement="start"     /* slide in from the left */
                 backdrop={false}      /* keep underlying page clickable */
@@ -50,39 +52,59 @@ function NavPanel() {
 
                 <Offcanvas.Body className="px-4">
                     <div className="container">
-                        <div className="row">
-                            <div className="col-6">
-                                <h3 onClick={() => setSelectedTab("Rooms")}>Rooms</h3>
+                        <div className="row" style={{cursor: "pointer"}}>
+                            <div 
+                                className={(selectedTab === "Rooms") ? "col-6 border-dark-purple purple-haze" : "col-6 border-dark-purple bg-white"}
+                            >
+                                <h3 
+                                    onClick={() => setSelectedTab("Rooms")}
+                                >
+                                    Rooms
+                                </h3>
                             </div>
-                            <div className="col-6">
+                            <div 
+                                className={(selectedTab !== "Rooms") ? "col-6 border-dark-purple purple-haze" : "col-6 border-dark-purple bg-white"}
+                            >
                                 <h3 onClick={() => setSelectedTab("Users")}>Users</h3>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-12">
+                        <div 
+                            className="row" 
+                            style={{
+                                cursor: 'pointer',
+                                backgroundColor: "#402468"
+                            }}
+                        >
+                            <div className="col-12 border-dark-purple text-center text-white">
                                 {selectedTab === "Rooms" ? (
                                     <>
                                         <h5 
                                             onClick={() => setShowRoomModal(true)}
-                                            className="place-self-center"
-                                            style={{
-                                                cursor: 'pointer',
-                                                backgroundColor: "#402468"
-                                            }}
+                                            className="m-0"
                                         >
                                             Create New Room
                                         </h5>
-                                        <ItemList type={"rooms"} />
                                     </>
                                     
                                 ) : (
                                     <>
-                                        <h5 onClick={ togglePresence }>
+                                        <h5 
+                                            onClick={ togglePresence }
+                                            className="m-0"
+                                        >
                                             { user.presence ? "Disable Presence" : "Enable Presence" }
                                         </h5>
-                                        <ItemList type={"users"} />
                                     </>
                                 )}
+                            </div>
+                        </div>
+                        <div className="row border-dark-purple">
+                            <div className="col-12 p-0">
+                                {selectedTab === "Rooms" ? (
+                                    <ItemList type={"rooms"} />
+                                ) : (
+                                    <ItemList type={"users"} />
+                                )} 
                             </div>
                         </div>
                     </div>

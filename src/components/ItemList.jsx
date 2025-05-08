@@ -38,17 +38,18 @@ function ItemList({ type }) {
     if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
 
     return (
-        <ul>
+        <ul className="list-unstyled">
         {
             type === "users" ? (
                 items.map(user => 
-                <li key={user.id}>
+                <li key={user.id} className="item-background ps-2">
                     <Link to={`/users/${user.id}`}>
                         {user.username}
-                    </Link></li>
+                    </Link>
+                </li>
             )) : type === "rooms" ? (
                 items.map(room => (
-                    <li key={room.id}>
+                    <li key={room.id} className="item-background ps-2">
                         <Link to={`/rooms/${room.id}`}>
                             {room.name}
                         </Link>

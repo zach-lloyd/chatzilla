@@ -8,7 +8,7 @@ function AuthLayout() {
       {/* row with zero gutters and full-viewport height */}
       <div className="row g-0 min-vh-100 justify-content-center">
         {/* each col takes 6/12 = 50% of width */}
-        <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+        <div className="col-12 col-md-6 d-flex justify-content-center align-items-center mt-5">
           <Logo />
         </div>
         <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">

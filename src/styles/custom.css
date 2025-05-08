@@ -1,3 +1,7 @@
+.border-dark-purple {
+    border: solid 1px #402468
+}
+
 .btn-monster {
     color:            #fff;
     background-color: #7AC142;
@@ -8,6 +12,18 @@
 .btn-monster:focus {
     background-color: #69a336;
     border-color:     #60902e;
+}
+
+.purple-haze {
+    background-color: #7D7098;
+}
+
+.item-background {
+    background-color: #ffffff !important;
+}
+
+.item-background:hover {
+    background-color: #69a336aa !important;
 }
 
 .text-custom-green {
