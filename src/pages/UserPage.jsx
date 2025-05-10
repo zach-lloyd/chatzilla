@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { MessengerContext } from '../components/MessengerContext'; 
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import DefaultImage from '../assets/default-image.png';
 
 function UserPage() {
     const { userId } = useParams();
@@ -95,13 +96,19 @@ function UserPage() {
     }
 
     return (
-        <>
+        <div className="d-flex flex-column justify-content-center align-items-center">
+            <img 
+                src={DefaultImage} 
+                alt="Image of the user's avatar"
+                width="100px"
+                className="rounded-circle me-2" 
+            />
             <h1>{selectedUser.username}</h1>
             <h2>Room Memberships</h2>
             {Array.isArray(selectedUser.rooms) && selectedUser.rooms.length > 0 ? (
-            <ul>
+            <ul className="list-unstyled">
                 {selectedUser.rooms.map(room => (
-                <li key={room.id}>
+                <li key={room.id} className="user-background">
                     <Link to={`/rooms/${room.id}`}>{room.name}</Link>
                 </li>
                 ))}
@@ -111,10 +118,10 @@ function UserPage() {
             )}
             {
                 user.id === selectedUser.id ? 
-                <button onClick={deleteAccount}>Delete Account</button> :
+                <button onClick={deleteAccount} className="btn btn-danger">Delete Account</button> :
                 <></>
             }
-        </>
+        </div>
     )
 }
 
