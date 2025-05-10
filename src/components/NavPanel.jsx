@@ -25,7 +25,7 @@ function NavPanel() {
                 onClick={() => setHidden(!hidden)}
                 style={{
                     position: 'fixed',
-                    zIndex: 1050,
+                    zIndex: 2000,
                     cursor: 'pointer',
                     width: '50px'
                 }}
@@ -108,17 +108,21 @@ function NavPanel() {
                             </div>
                         </div>
                     </div>
-
-                    <Modal show={showRoomModal} onHide={() => setShowRoomModal(false)} backdrop="static">
-                        <Modal.Header closeButton>
-                            <Modal.Title>Create a Room</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <CreateRoomForm onClose={() => setShowRoomModal(false)} />
-                        </Modal.Body>
-                    </Modal>
                 </Offcanvas.Body>
             </Offcanvas>
+            <Modal 
+                show={showRoomModal} 
+                onHide={() => setShowRoomModal(false)} 
+                backdrop
+                className="d-flex min-vh-100 justify-content-center align-items-center"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Create a Room</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <CreateRoomForm onClose={() => setShowRoomModal(false)} />
+                </Modal.Body>
+            </Modal>
         </div>
     );
 }
