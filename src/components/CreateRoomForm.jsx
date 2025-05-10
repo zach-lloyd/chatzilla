@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { MessengerContext } from './MessengerContext';
 import { useNavigate } from 'react-router-dom';
 
-function CreateRoomForm() {
+function CreateRoomForm({ onClose, hidePanel }) {
     const [roomName, setRoomName] = useState("");
     const [roomDescription, setRoomDescription] = useState("");
     const [isPublic, setIsPublic] = useState(true);
@@ -37,6 +37,8 @@ function CreateRoomForm() {
                 if (data && data.id) {
                     console.log(`Navigating to /rooms/${data.id}`);
                     navigate(`/rooms/${data.id}`); // <-- Use navigate
+                    onClose();
+                    hidePanel();
                 } else {
                     console.error("Created room data missing ID:", data);
                 }
@@ -55,13 +57,14 @@ function CreateRoomForm() {
     };
 
     return (
-        <div style={{zIndex: 1000}}>
+        <div style={{zIndex: 1000}} className="d-flex flex-column" >
             <input 
                 type="text" 
                 placeholder="Name your room..." 
                 value={roomName} 
                 onChange={(e) => setRoomName(e.target.value)} 
                 required
+                className="mb-2"
             />
             <textarea 
                 maxLength={DESCRIPTION_LENGTH}
@@ -77,7 +80,7 @@ function CreateRoomForm() {
                 />
                 Public
             </label>
-            <button onClick={handleRoomCreation} className="btn btn-primary w-100">Create Room</button>
+            <button onClick={handleRoomCreation} className="btn btn-monster w-100">Create Room</button>
         </div>
     )
 }

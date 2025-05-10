@@ -115,12 +115,13 @@ function NavPanel() {
                 onHide={() => setShowRoomModal(false)} 
                 backdrop
                 className="d-flex min-vh-100 justify-content-center align-items-center"
+                dialogClassName="w-75"
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Create a Room</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <CreateRoomForm onClose={() => setShowRoomModal(false)} />
+                    <CreateRoomForm onClose={() => setShowRoomModal(false)} hidePanel={() => setHidden(true)}/>
                 </Modal.Body>
             </Modal>
         </div>

@@ -26,6 +26,10 @@
     background-color: #69a336aa !important;
 }
 
+.my-wide-modal {
+    max-width: 90vh;
+}
+
 .text-custom-green {
     color: #7AC142 !important;
 }
