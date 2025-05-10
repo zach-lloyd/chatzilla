@@ -3,10 +3,10 @@ import { MessengerContext } from './MessengerContext';
 import DefaultImage from '../assets/default-image.png';
 import ItemList from "./ItemList.jsx";
 import CreateRoomForm from "./CreateRoomForm.jsx";
-import Modal from "./Modal.jsx"; 
 import RightArrow from "../assets/right-arrow-green.png";
 import LeftArrow from "../assets/left-arrow-green.png";
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Modal, Button } from "react-bootstrap";
 
 function NavPanel() {
     const { user, togglePresence } = useContext(MessengerContext); 
@@ -18,7 +18,7 @@ function NavPanel() {
     console.log("selected: ", selectedTab)
 
     return (
-        <div style={{backgroundColor: hidden ? "#1f0131" : "#402468" }}>
+        <div style={{backgroundColor: hidden ? "#1f0131" : "#402468", zIndex: 1100 }}>
             <img 
                 src={ hidden ? RightArrow : LeftArrow } 
                 alt="An arrow button to open and close the navigation panel" 
@@ -109,11 +109,14 @@ function NavPanel() {
                         </div>
                     </div>
 
-                    {showRoomModal && (
-                        <Modal onClose={() => setShowRoomModal(false)}>
+                    <Modal show={showRoomModal} onHide={() => setShowRoomModal(false)} backdrop="static">
+                        <Modal.Header closeButton>
+                            <Modal.Title>Create a Room</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
                             <CreateRoomForm onClose={() => setShowRoomModal(false)} />
-                        </Modal>
-                    )}
+                        </Modal.Body>
+                    </Modal>
                 </Offcanvas.Body>
             </Offcanvas>
         </div>

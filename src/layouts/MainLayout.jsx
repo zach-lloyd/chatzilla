@@ -37,14 +37,14 @@ function MainLayout() {
   return (
     <div className="container-fluid d-flex flex-column p-0 m-0 min-vh-100">
       <header className="p-0 d-flex justify-content-between align-items-center">
-        <div>
-          <NavPanel />
+        <NavPanel />
+        <div className="p-2">
           {user && user.email && user.username ? (
             <span className="me-3">Logged in as: <strong>{user.username}</strong></span>
           ) : (
             <span className="me-3 text-danger">User or Email missing</span> 
           )}
-          <button onClick={handleSignOut} className="btn btn-danger btn-sm">Log Out</button>
+          <button onClick={handleSignOut} className="btn btn-monster btn-sm">Log Out</button>
         </div>
       </header>
 

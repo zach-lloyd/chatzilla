@@ -42,18 +42,18 @@ function ItemList({ type }) {
         {
             type === "users" ? (
                 items.map(user => 
-                <li key={user.id} className="item-background ps-2">
                     <Link to={`/users/${user.id}`}>
-                        {user.username}
+                        <li key={user.id} className="item-background ps-2">
+                            {user.username}
+                        </li>
                     </Link>
-                </li>
             )) : type === "rooms" ? (
                 items.map(room => (
-                    <li key={room.id} className="item-background ps-2">
-                        <Link to={`/rooms/${room.id}`}>
+                    <Link to={`/rooms/${room.id}`}>
+                        <li key={room.id} className="item-background ps-2">
                             {room.name}
-                        </Link>
-                    </li>
+                        </li>
+                    </Link>
                 ))
             ) : null 
         }

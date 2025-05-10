@@ -2,8 +2,8 @@ import React from "react";
 
 function HomePage() {
     return (
-        <div>
-            <h1>Hello World!</h1>
+        <div className="d-flex min-vh-100 justify-content-center align-items-center">
+            <h1 className="text-center">Welcome! Open the sidebar and join some rooms!</h1>
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef, useCallback } from 'rea
 import { useParams } from 'react-router-dom';
 import { MessengerContext } from '../components/MessengerContext'; 
 import SubmitButton from "../assets/send.png";
+import { Link } from 'react-router-dom'; 
 import { getConsumer, disconnectConsumer } from '../services/cable'; // <-- Import consumer logic
 
 function RoomPage() {
@@ -275,94 +276,116 @@ function RoomPage() {
     const offlineMembers = allMembers.filter(u => !onlineUserIds.includes(u.id));
 
     return (
-        <div>
-            <h1>{room.name}</h1>
-            <p>{room.description || <i>No description</i>}</p>
-            <p><strong>Status:</strong> {room.public ? 'Public' : 'Private'}</p>
-
-            <hr />
-
-            <h2>Members ({allMembers.length})</h2>
-
-            <h3>Online ({onlineMembers.length})</h3>
-            {onlineMembers.length > 0 ? (
-                <ul>
-                    {onlineMembers.map(u => (
-                        <li key={u.id}>{u.username || `User ${u.id}`}</li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No one is online right now.</p>
-            )}
-
-            <h3>Offline ({offlineMembers.length})</h3>
-            {offlineMembers.length > 0 ? (
-                <ul>
-                    {offlineMembers.map(u => (
-                        <li key={u.id}>{u.username || `User ${u.id}`}</li>
-                    ))}
-                </ul>
-            ) : (
-                <p>Everyone’s online!</p>
-            )}
-
-            {/* --- Message Display Area --- */}
-            <div style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
-                {canViewMessages ? (
-                    // --- JSX to display messages (if authorized) ---
-                    <> 
-                        <h2>Messages</h2>
-                        {/* Ensure messages state exists and is an array */}
-                        {Array.isArray(messages) && messages.length > 0 ? (
-                            <ul>
-                                {messages.map(msg => (
-                                    <li key={msg.id}>
-                                        <strong>{msg.user?.username || 'User'}</strong> ({new Date(msg.created_at).toLocaleString()}):
-                                        <p style={{ margin: '0 0 0 10px', padding: 0 }}>{msg.body}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No messages yet.</p>
-                        )}
-                    </>
-                ) : (
-                    // --- JSX for unauthorized ---
-                    // Check if the room data has loaded before declaring unauthorized
-                    // (Avoid showing this during initial loading state)
-                    !loading && room ? (
-                        <>
-                            <h2>You are not authorized to view messages. Join the room to view messages.</h2>
+        <div className="container-fluid row mt-5">
+            <div className="col-12 col-md-9">
+                {/* --- Message Display Area --- */}
+                <div style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
+                    {canViewMessages ? (
+                        // --- JSX to display messages (if authorized) ---
+                        <> 
+                            <h2>Messages</h2>
+                            {/* Ensure messages state exists and is an array */}
+                            {Array.isArray(messages) && messages.length > 0 ? (
+                                <ul className="list-unstyled d-flex flex-column">
+                                    {messages.map(msg => (
+                                        <li 
+                                            key={msg.id} 
+                                            style={{
+                                                backgroundColor: msg.user?.username === user.username ? "#7AC142" : "#402468",
+                                                alignSelf: msg.user?.username === user.username ? "end" : "start"
+                                            }}
+                                            className="mb-2 rounded w-50 p-2"
+                                        >
+                                            <strong>{msg.user?.username || 'User'}</strong> ({new Date(msg.created_at).toLocaleString()}):
+                                            <p style={{ margin: '0 0 0 10px', padding: 0 }}>{msg.body}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No messages yet.</p>
+                            )}
                         </>
-                    ) : null // Don't show anything during load or if room doesn't exist
+                    ) : (
+                        // --- JSX for unauthorized ---
+                        // Check if the room data has loaded before declaring unauthorized
+                        // (Avoid showing this during initial loading state)
+                        !loading && room ? (
+                            <>
+                                <h2>You are not authorized to view messages. Join the room to view messages.</h2>
+                            </>
+                        ) : null // Don't show anything during load or if room doesn't exist
+                    )}
+                </div>
+                {/* --- --- */}
+
+                {isMember ? ( // Show input only if user is a member
+                    <div className="d-flex justify-content-between">
+                        <textarea 
+                            type="text" 
+                            placeholder="Tell the room what's on your mind..." 
+                            value={messageText} 
+                            onChange={(e) => setMessageText(e.target.value)} 
+                            style={{width: "63vw", backgroundColor: "#402468", color: "#ffffff"}}
+                            className="rounded"
+                        />
+                        <button 
+                            onClick={submitMessage} 
+                            type="button" 
+                            style={{width: "6vw", padding: 0}}
+                        > 
+                            <img
+                                src={SubmitButton}
+                                alt="Send message"
+                                style={{width: "100%", height: "100%", objectFit: "contain"}}
+                            />
+                        </button>
+                    </div>
+                ) : (
+                    // Show Join button again here if needed, or maybe just rely on the one above
+                    // Depending on your desired layout, you might only need one Join button.
+                    // If the room is public but user isn't a member, show Join button?
+                    !loading && room && !isMember && (
+                        <button onClick={joinRoom} className="btn-monster">Join Room</button>
+                    )
                 )}
             </div>
-            {/* --- --- */}
 
-            {isMember ? ( // Show input only if user is a member
-                <div>
-                    <input 
-                        type="text" 
-                        placeholder="Tell the room what's on your mind..." 
-                        value={messageText} 
-                        onChange={(e) => setMessageText(e.target.value)} 
-                    />
-                    <button onClick={submitMessage} type="button"> 
-                        <img
-                            src={SubmitButton}
-                            alt="Send message" // More concise alt text
-                        />
-                    </button>
-                    <button onClick={leaveRoom}>Leave Room</button>
-                </div>
-            ) : (
-                // Show Join button again here if needed, or maybe just rely on the one above
-                // Depending on your desired layout, you might only need one Join button.
-                // If the room is public but user isn't a member, show Join button?
-                !loading && room && !isMember && (
-                     <button onClick={joinRoom}>Join Room</button>
-                )
-            )}
+            <div className="col-12 col-md-3">
+                <h1>{room.name}</h1>
+                <p>{room.description || <i>No description</i>}</p>
+                <p><strong>Status:</strong> {room.public ? 'Public' : 'Private'}</p>
+                <button onClick={leaveRoom} className="btn-monster">Leave Room</button>
+
+                <hr />
+
+                <h2>Members ({allMembers.length})</h2>
+
+                <h3>Online ({onlineMembers.length})</h3>
+                {onlineMembers.length > 0 ? (
+                    <ul className="list-unstyled">
+                        {onlineMembers.map(u => (
+                            <Link to={`/users/${u.id}`}>
+                                <li key={u.id} className="ps-2 user-background">{u.username || `User ${u.id}`}</li>
+                            </Link>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No one is online right now.</p>
+                )}
+
+                <h3>Offline ({offlineMembers.length})</h3>
+                {offlineMembers.length > 0 ? (
+                    <ul className="list-unstyled">
+                        {offlineMembers.map(u => (
+                            <Link to={`/users/${u.id}`}>
+                                <li key={u.id} className="ps-2 user-background">{u.username || `User ${u.id}`}</li>
+                            </Link>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>Everyone’s online!</p>
+                )}
+            </div>
         </div>
     );
 }

@@ -30,6 +30,14 @@
     color: #7AC142 !important;
 }
 
+.user-background {
+    background-color: #1f0131;
+}
+
+.user-background:hover {
+    background-color: #7AC142;
+}
+
 @media (min-width: 768px) {
     .w-md-75 { width: 75% !important; }
 }

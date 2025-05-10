@@ -55,7 +55,7 @@ function CreateRoomForm() {
     };
 
     return (
-        <div>
+        <div style={{zIndex: 1000}}>
             <input 
                 type="text" 
                 placeholder="Name your room..." 
