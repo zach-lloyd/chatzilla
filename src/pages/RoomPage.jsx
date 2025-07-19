@@ -354,7 +354,7 @@ function RoomPage() {
                 <h1>{room.name}</h1>
                 <p>{room.description || <i>No description</i>}</p>
                 <p><strong>Status:</strong> {room.public ? 'Public' : 'Private'}</p>
-                <button onClick={leaveRoom} className="btn-monster">Leave Room</button>
+                {isMember ? <button onClick={leaveRoom} className="btn-monster">Leave Room</button> : <></>}
 
                 <hr />
 
