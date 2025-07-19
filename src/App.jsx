@@ -1,6 +1,5 @@
 import React, { useEffect, useContext } from 'react';
 import SignIn from './components/SignIn.jsx';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { MessengerContext } from './components/MessengerContext';
 
