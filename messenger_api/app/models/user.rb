@@ -19,5 +19,5 @@ class User < ApplicationRecord
   # --- Membership Associations ---
   has_many :memberships, dependent: :destroy # User's memberships
   has_many :rooms, through: :memberships    # Rooms the user is a member of
-  has_many :messages
+  has_many :messages, dependent: :destroy
 end
