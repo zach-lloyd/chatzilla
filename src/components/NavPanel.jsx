@@ -65,7 +65,7 @@ function NavPanel() {
 
         <Offcanvas.Body className="px-4">
           <div className="container">
-            <div className="row" style={{ cursor: "pointer" }}>
+            <div className="row" role="tablist">
               <div
                 className={
                   selectedTab === "Rooms"
@@ -73,7 +73,19 @@ function NavPanel() {
                     : "col-6 border-dark-purple bg-white"
                 }
               >
-                <h3 onClick={() => setSelectedTab("Rooms")}>Rooms</h3>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={selectedTab === "Rooms"}
+                  className="btn btn-link w-100 p-2 m-0 text-decoration-none"
+                  style={{
+                    fontSize: "1.75rem",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setSelectedTab("Rooms")}
+                >
+                  Rooms
+                </button>
               </div>
               <div
                 className={
@@ -82,29 +94,46 @@ function NavPanel() {
                     : "col-6 border-dark-purple bg-white"
                 }
               >
-                <h3 onClick={() => setSelectedTab("Users")}>Users</h3>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={selectedTab !== "Rooms"}
+                  className="btn btn-link w-100 p-2 m-0 text-decoration-none"
+                  style={{ fontSize: "1.75rem", cursor: "pointer" }}
+                  onClick={() => setSelectedTab("Users")}
+                >
+                  Users
+                </button>
               </div>
             </div>
-            <div
-              className="row"
-              style={{
-                cursor: "pointer",
-                backgroundColor: "#402468",
-              }}
-            >
+            <div className="row" style={{ backgroundColor: "#402468" }}>
               <div className="col-12 border-dark-purple text-center text-white">
                 {selectedTab === "Rooms" ? (
-                  <>
-                    <h5 onClick={() => setShowRoomModal(true)} className="m-0">
-                      Create New Room
-                    </h5>
-                  </>
+                  <button
+                    type="button"
+                    className="btn btn-link text-white p-2 m-0"
+                    onClick={() => setShowRoomModal(true)}
+                    style={{
+                      fontSize: "1.25rem",
+                      cursor: "pointer",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Create New Room
+                  </button>
                 ) : (
-                  <>
-                    <h5 onClick={togglePresence} className="m-0">
-                      {user.presence ? "Disable Presence" : "Enable Presence"}
-                    </h5>
-                  </>
+                  <button
+                    type="button"
+                    className="btn btn-link text-white p-2 m-0"
+                    onClick={togglePresence}
+                    style={{
+                      fontSize: "1.25rem",
+                      cursor: "pointer",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {user.presence ? "Disable Presence" : "Enable Presence"}
+                  </button>
                 )}
               </div>
             </div>
