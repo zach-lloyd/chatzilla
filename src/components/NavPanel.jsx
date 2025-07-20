@@ -15,12 +15,11 @@ function NavPanel() {
   const [hidden, setHidden] = useState(true);
   const [showRoomModal, setShowRoomModal] = useState(false);
 
-  console.log("selected: ", selectedTab);
-
   return (
     <div
       style={{ backgroundColor: hidden ? "#1f0131" : "#402468", zIndex: 1100 }}
     >
+      {/* Image of an arrow that can be clicked to toggle visibility of the Nav Panel. */}
       <button
         type="button"
         onClick={() => setHidden(!hidden)}
@@ -37,7 +36,7 @@ function NavPanel() {
       >
         <img
           src={hidden ? RightArrow : LeftArrow}
-          alt=""
+          alt="" // Leave this blank to avoid reading the element twice.
           style={{ width: "100%" }}
         />
       </button>
@@ -45,9 +44,9 @@ function NavPanel() {
       <Offcanvas
         show={!hidden}
         onHide={() => setHidden(!hidden)}
-        placement="start" /* slide in from the left */
-        backdrop={false} /* keep underlying page clickable */
-        scroll /* body scroll stays enabled */
+        placement="start" // Slide Nav Panel in from the left.
+        backdrop={false} // Keep the underlying page clickable.
+        scroll // Body scroll stays enabled.
       >
         <Offcanvas.Header className="pb-0 mt-5">
           <Offcanvas.Title className="d-flex justify-content-center">
@@ -62,7 +61,7 @@ function NavPanel() {
             </h3>
           </Offcanvas.Title>
         </Offcanvas.Header>
-
+        {/* Tab buttons for toggling between a list of users and a list of rooms. */}
         <Offcanvas.Body className="px-4">
           <div className="container">
             <div className="row" role="tablist">
@@ -87,6 +86,7 @@ function NavPanel() {
                   Rooms
                 </button>
               </div>
+
               <div
                 className={
                   selectedTab !== "Rooms"
@@ -106,6 +106,10 @@ function NavPanel() {
                 </button>
               </div>
             </div>
+            {/* 
+                Button for either toggling the user's presence or creating a
+                new room, depending on what tab is selected. 
+            */}
             <div className="row" style={{ backgroundColor: "#402468" }}>
               <div className="col-12 border-dark-purple text-center text-white">
                 {selectedTab === "Rooms" ? (
@@ -137,6 +141,10 @@ function NavPanel() {
                 )}
               </div>
             </div>
+            {/* 
+                Display either a list of rooms or list of users, depending on 
+                which tab is selected. 
+            */}
             <div className="row border-dark-purple">
               <div className="col-12 p-0">
                 {selectedTab === "Rooms" ? (
@@ -149,6 +157,10 @@ function NavPanel() {
           </div>
         </Offcanvas.Body>
       </Offcanvas>
+      {/* 
+          Modal that displays form for creating a room that pops up when user 
+          clicks the Create Room button. 
+      */}
       <Modal
         show={showRoomModal}
         onHide={() => setShowRoomModal(false)}
