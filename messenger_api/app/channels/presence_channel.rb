@@ -2,11 +2,12 @@ class PresenceChannel < ApplicationCable::Channel
   ONLINE_SET_KEY = "users:online".freeze
 
   def self.broadcast_online_users
-    # Fetch all IDs as integers
+    # Fetch all IDs of users that are online as integers.
     online_ids = $redis.smembers(ONLINE_SET_KEY).map(&:to_i)
+    # Fetch all IDs of users that are online and do not have their presence 
+    # hidden as integers.
     visible_ids = User.where(id: online_ids, presence: true).pluck(:id)
 
-    # Broadcast a simple payload
     ActionCable.server.broadcast(
       "presence",
       { online_user_ids: visible_ids }
@@ -15,6 +16,7 @@ class PresenceChannel < ApplicationCable::Channel
 
   def subscribed
     if current_user.presence?
+      # Ensure user shows up as online upon initial sign-in.
       added = $redis.sadd(ONLINE_SET_KEY, current_user.id)
       Rails.logger.debug "[PresenceChannel] → Redis SADD returned=#{added}"
     else
