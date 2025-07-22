@@ -31,8 +31,8 @@ module MessengerApi
     
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://localhost:5173'
-        resource '*', 
+        origins "http://localhost:5173"
+        resource "*", 
         headers: :any, 
         methods: [:get, :post, :patch, :put, :delete, :options],
         credentials: true
@@ -40,7 +40,7 @@ module MessengerApi
     end
 
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore, key: '_remind_me_api_session'
+    config.middleware.use ActionDispatch::Session::CookieStore, key: "_remind_me_api_session"
     config.middleware.use ActionDispatch::Flash
   end
 end
