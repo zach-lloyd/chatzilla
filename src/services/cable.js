@@ -1,7 +1,8 @@
-import { createConsumer } from '@rails/actioncable';
+import { createConsumer } from "@rails/actioncable";
 
 // Use environment variables for flexibility
-const WS_URL = import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:3000/cable';
+const WS_URL =
+  import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:3000/cable";
 // Note: Use 'wss://' for secure connections in production
 
 // You might need to pass cookies or tokens here depending on auth setup in connection.rb
@@ -13,12 +14,12 @@ const WS_URL = import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:3000/cable'
 let consumer = null;
 
 export const getConsumer = () => {
-    if (!consumer) {
-        console.log(`Creating Action Cable consumer for: ${WS_URL}`);
-        consumer = createConsumer(WS_URL);
-    }
-    return consumer;
-}
+  if (!consumer) {
+    console.log(`Creating Action Cable consumer for: ${WS_URL}`);
+    consumer = createConsumer(WS_URL);
+  }
+  return consumer;
+};
 
 export const disconnectConsumer = () => {
   if (consumer) {
@@ -26,4 +27,4 @@ export const disconnectConsumer = () => {
     consumer.disconnect();
     consumer = null;
   }
-}
+};
