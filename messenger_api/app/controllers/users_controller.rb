@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    # eager-load rooms to avoid N+1
+    # Eager-load rooms to avoid N + 1 queries.
     @user = User.includes(:rooms).find(params[:id])
     render json: @user.as_json(
       only:   [:id, :username, :presence],
@@ -28,16 +28,16 @@ class UsersController < ApplicationController
   end
 
   def toggle_presence
-    @user.toggle!(:presence)          # flips true⇄false and saves
+    @user.toggle!(:presence)          
 
-    # Keep Redis set in sync:
+    # Update Redis set that is being used to store the ids of online users.
     if @user.presence?
       $redis.sadd(PresenceChannel::ONLINE_SET_KEY, @user.id)
     else
       $redis.srem(PresenceChannel::ONLINE_SET_KEY, @user.id)
     end
 
-    # Re-broadcast the updated list
+    # Re-broadcast the updated list.
     PresenceChannel.broadcast_online_users
 
     render json: { presence: @user.presence }
