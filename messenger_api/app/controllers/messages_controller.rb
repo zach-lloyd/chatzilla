@@ -11,6 +11,14 @@ class MessagesController < ApplicationController
       return 
     end
 
+    # Check the message for profanity using Neutrino.
+    is_profane = ProfanityChecker.new(message_params[:body]).profane?
+    if is_profane
+      render json: { error: "Your message contains inappropriate language and was not sent." },
+             status: :unprocessable_entity
+      return
+    end
+
     # If authorization passed, proceed with creating the message.
     @message = @room.messages.build(message_params.merge(user: current_user))
 

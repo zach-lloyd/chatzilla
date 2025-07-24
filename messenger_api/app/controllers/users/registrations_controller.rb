@@ -13,7 +13,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create   
-    super
+    username = sign_up_params[:username]
+
+    if username.present? && ProfanityChecker.new(username).profane?
+      # Build a resource object so error can be added to it.
+      build_resource(sign_up_params)
+      resource.errors.add(:username, "contains inappropriate language.")
+      
+      # Respond with the resource, which will now contain the error
+      render json: { 
+        status: { 
+          code: 422, 
+          message: "Registration failed.", 
+          errors: resource.errors.full_messages 
+        } 
+      }, status: :unprocessable_entity
+    else
+      # If the username is clean, proceed with the default Devise behavior.
+      super
+    end
   end
 
   # DELETE /resource
