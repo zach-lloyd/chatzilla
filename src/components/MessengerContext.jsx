@@ -74,6 +74,13 @@ export const MessengerProvider = ({ children }) => {
       );
     } else if (errorData && typeof errorData.error === "string") {
       statements.push(errorData.error);
+    } else if (
+      errorData &&
+      // The errors object is nested within status for this particular error,
+      // so need to first call status to be able to access it.
+      errorData.status.errors[0] === "Username contains inappropriate language."
+    ) {
+      statements.push(errorData.status.errors[0]);
     } else {
       // Handle cases where the error format is unexpected (e.g., a simple
       // string error).

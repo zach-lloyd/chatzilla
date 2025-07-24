@@ -115,7 +115,7 @@ function NavPanel() {
                 {selectedTab === "Rooms" ? (
                   <button
                     type="button"
-                    className="btn btn-link text-white p-2 m-0"
+                    className="btn btn-link text-white p-2 m-0 w-100"
                     onClick={() => setShowRoomModal(true)}
                     style={{
                       fontSize: "1.25rem",
@@ -128,7 +128,7 @@ function NavPanel() {
                 ) : (
                   <button
                     type="button"
-                    className="btn btn-link text-white p-2 m-0"
+                    className="btn btn-link text-white p-2 m-0 w-100"
                     onClick={togglePresence}
                     style={{
                       fontSize: "1.25rem",
