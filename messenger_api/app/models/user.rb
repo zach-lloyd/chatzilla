@@ -3,9 +3,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
   validates :username, presence: true
-
   validates :username, uniqueness: { case_sensitive: false }
-
   validates :username, length: { minimum: 3, maximum: 30 }
   validates :username, format: { 
     with: /\A[a-zA-Z0-9_]+\z/, 
