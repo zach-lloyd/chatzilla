@@ -8,6 +8,7 @@ export const MessengerProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [csrfToken, setCsrfToken] = useState(null);
+
   // Get CSRF token from the backend and store for later use.
   useEffect(() => {
     const fetchCsrf = async () => {
@@ -21,12 +22,14 @@ export const MessengerProvider = ({ children }) => {
     };
     fetchCsrf();
   }, [BASE_URL]);
-  // Memoised helper so child components can refresh the user object
+
+  // Memoized helper so child components can refresh the user object
   // without triggering unnecessary re-renders.
   const updateUser = useCallback((userData) => {
     console.log("Context: updateUser called. Calling setUser with:", userData);
     setUser(userData);
   }, []);
+
   // Allow the user to toggle whether they show up as online or offline.
   const togglePresence = async () => {
     if (!user) return;
@@ -45,6 +48,7 @@ export const MessengerProvider = ({ children }) => {
       console.error("Error toggling presence:", err);
     }
   };
+
   // Normalize error messages into readable format.
   function processErrors(errorData) {
     let statements = [];
@@ -109,6 +113,7 @@ export const MessengerProvider = ({ children }) => {
     </MessengerContext.Provider>
   );
 };
+
 // This is needed to handle "missing in props validation" error raised by ESLint.
 MessengerProvider.propTypes = {
   children: PropTypes.node,

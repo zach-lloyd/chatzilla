@@ -13,6 +13,7 @@ function UserPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
   // Function to attach to a "delete" button so the user can delete their account
   // from their user page.
   const deleteAccount = async () => {
@@ -83,6 +84,7 @@ function UserPage() {
       setLoading(false);
     }
   }, [BASE_URL, userId, setSelectedUser]);
+
   // Effect for initial data load.
   useEffect(() => {
     fetchUserData();
@@ -113,6 +115,7 @@ function UserPage() {
         className="rounded-circle me-2"
       />
       <h1>{selectedUser.username}</h1>
+
       {/* If the user is a member of any groups, list them here. */}
       <h2>Room Memberships</h2>
       {Array.isArray(selectedUser.rooms) && selectedUser.rooms.length > 0 ? (
@@ -126,6 +129,7 @@ function UserPage() {
       ) : (
         <p>This user isn’t a member of any rooms yet.</p>
       )}
+
       {/*
           Make sure the user page belongs to the current user before displaying
           the "Delete Account" button. 

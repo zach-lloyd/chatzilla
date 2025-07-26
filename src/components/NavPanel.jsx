@@ -19,7 +19,8 @@ function NavPanel() {
     <div
       style={{ backgroundColor: hidden ? "#1f0131" : "#402468", zIndex: 1100 }}
     >
-      {/* Image of an arrow that can be clicked to toggle visibility of the Nav Panel. */}
+      {/* Image of an arrow that can be clicked to toggle visibility of the 
+          Nav Panel. */}
       <button
         type="button"
         onClick={() => setHidden(!hidden)}
@@ -61,6 +62,7 @@ function NavPanel() {
             </h3>
           </Offcanvas.Title>
         </Offcanvas.Header>
+
         {/* Tab buttons for toggling between a list of users and a list of rooms. */}
         <Offcanvas.Body className="px-4">
           <div className="container">
@@ -106,6 +108,7 @@ function NavPanel() {
                 </button>
               </div>
             </div>
+
             {/* 
                 Button for either toggling the user's presence or creating a
                 new room, depending on what tab is selected. 
@@ -141,6 +144,7 @@ function NavPanel() {
                 )}
               </div>
             </div>
+
             {/* 
                 Display either a list of rooms or list of users, depending on 
                 which tab is selected. 
@@ -157,6 +161,7 @@ function NavPanel() {
           </div>
         </Offcanvas.Body>
       </Offcanvas>
+
       {/* 
           Modal that displays form for creating a room that pops up when user 
           clicks the Create Room button. 

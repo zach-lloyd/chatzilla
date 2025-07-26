@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { MessengerContext } from "../components/MessengerContext";
 import PropTypes from "prop-types";
+
 // Get a list of either rooms or users. Type should be either "rooms" or "users".
 function ItemList({ type }) {
   const [items, setItems] = useState([]);
@@ -9,6 +10,7 @@ function ItemList({ type }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { BASE_URL } = useContext(MessengerContext);
+
   // Get the applicable item list each time the type of items changes.
   useEffect(() => {
     setLoading(true);
@@ -60,6 +62,7 @@ function ItemList({ type }) {
 }
 
 export default ItemList;
+
 // This is needed to handle "missing in props validation" error raised by ESLint.
 ItemList.propTypes = {
   type: PropTypes.node,

@@ -13,6 +13,7 @@ class MessagesController < ApplicationController
 
     # Check the message for profanity using Neutrino.
     is_profane = ProfanityChecker.new(message_params[:body]).profane?
+    
     if is_profane
       render json: { error: "Your message contains inappropriate language and was not sent." },
              status: :unprocessable_entity

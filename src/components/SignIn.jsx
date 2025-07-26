@@ -8,6 +8,7 @@ function SignIn() {
   const [errors, setErrors] = useState([]);
   const { BASE_URL, setIsAuthenticated, updateUser, processErrors, csrfToken } =
     useContext(MessengerContext);
+
   // Sends credentials to /users/sign_in and updates global auth state.
   const handleSignIn = async () => {
     setErrors([]); // Clear out any previous errors.

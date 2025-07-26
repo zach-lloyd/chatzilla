@@ -12,7 +12,9 @@ RSpec.describe Message, type: :model do
       it "is invalid without a body" do
         message.body = nil
         expect(message).not_to be_valid
-        expect(message.errors[:body]).to include("is too short (minimum is 1 character)")
+        expect(message.errors[:body]).to include(
+          "is too short (minimum is 1 character)"
+        )
       end
 
       it "is invalid if body is longer than 300 characters" do

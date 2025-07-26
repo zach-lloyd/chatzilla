@@ -52,10 +52,12 @@ function RoomPage() {
       setLoading(false);
     }
   }, [roomId, BASE_URL]);
+
   // Effect for initial load of the applicable room's data.
   useEffect(() => {
     fetchRoomData();
   }, [fetchRoomData]);
+
   // Effect for Action Cable room subscription.
   useEffect(() => {
     if (!roomId) return; // Don't subscribe if roomId isn't available yet.
@@ -72,11 +74,13 @@ function RoomPage() {
         connected() {
           console.log(`Connected to RoomChannel ${roomId}`);
         },
+
         // Called when the subscription is rejected by the server.
         rejected() {
           console.error(`Subscription rejected for RoomChannel ${roomId}`);
           setError("Could not connect to the chat room. Authorization failed.");
         },
+
         // Called when the subscription is terminated by the server.
         disconnected() {
           console.log(`Disconnected from RoomChannel ${roomId}`);
@@ -98,17 +102,21 @@ function RoomPage() {
     );
 
     subscriptionRef.current = subscription;
+
     // This runs when the component unmounts or roomId changes.
     return () => {
       console.log(`Unsubscribing from RoomChannel ${roomId}`);
+
       if (subscriptionRef.current) {
         subscriptionRef.current.unsubscribe();
         subscriptionRef.current = null;
       }
+
       // Disconnect consumer if no other subscriptions are active.
       disconnectConsumer();
     };
   }, [roomId]);
+
   // Subscribe to Presence channel.
   useEffect(() => {
     const consumer = getConsumer();
@@ -171,6 +179,7 @@ function RoomPage() {
 
   const joinRoom = async () => {
     const url = `${BASE_URL}/rooms/${roomId}/membership`;
+
     // Ensure user and roomId are available before attempting to join.
     if (!user || !roomId) {
       console.error("User or Room ID missing, cannot join room.");
@@ -225,6 +234,7 @@ function RoomPage() {
         },
         credentials: "include",
       });
+
       // Handle Success (Status 204 No Content is expected).
       if (response.ok || response.status === 204) {
         console.log("Successfully left the room.");
@@ -357,6 +367,7 @@ function RoomPage() {
               }}
               className="rounded"
             />
+
             <button
               onClick={submitMessage}
               type="button"
@@ -397,6 +408,7 @@ function RoomPage() {
         <hr />
 
         <h2>Members ({allMembers.length})</h2>
+
         {/* Display the users that are online. */}
         <h3>Online ({onlineMembers.length})</h3>
         {onlineMembers.length > 0 ? (
@@ -412,6 +424,7 @@ function RoomPage() {
         ) : (
           <p>No one is online right now.</p>
         )}
+
         {/* Display the users that are offline. */}
         <h3>Offline ({offlineMembers.length})</h3>
         {offlineMembers.length > 0 ? (

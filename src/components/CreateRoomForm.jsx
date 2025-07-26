@@ -13,6 +13,7 @@ function CreateRoomForm({ onClose, hidePanel }) {
   const DESCRIPTION_LENGTH = 300;
   const { BASE_URL, csrfToken } = useContext(MessengerContext);
   const navigate = useNavigate();
+
   // Create the room using the information specified by the user.
   const handleRoomCreation = async () => {
     const url = `${BASE_URL}/rooms`;
@@ -91,6 +92,7 @@ function CreateRoomForm({ onClose, hidePanel }) {
 }
 
 export default CreateRoomForm;
+
 // This is needed to handle "missing in props validation" error raised by ESLint.
 CreateRoomForm.propTypes = {
   onClose: PropTypes.node,
