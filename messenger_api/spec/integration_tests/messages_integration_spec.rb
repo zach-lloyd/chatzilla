@@ -6,7 +6,6 @@ RSpec.describe "Messages API", type: :request do
       user = create(:user)
       room = create(:room)
 
-      # Make the user a member of the room first.
       create(:membership, user: user, room: room) 
 
       sign_in(user, scope: :user)
@@ -17,7 +16,6 @@ RSpec.describe "Messages API", type: :request do
         }
       }
 
-      # Check that the Message count increases by 1 after the request.
       expect {
         post "/rooms/#{room.id}/messages", params: message_params, as: :json
       }.to change(Message, :count).by(1)
