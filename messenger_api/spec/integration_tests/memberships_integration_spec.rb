@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Messages API", type: :request do
+RSpec.describe "Memberships API", type: :request do
   describe "POST /rooms/:room_id/membership" do
     it "creates a new membership when the user joins a room" do
       user = create(:user)
