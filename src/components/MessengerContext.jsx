@@ -1,6 +1,53 @@
 import { createContext, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
+// Normalize error messages into readable format. Export this function separately
+// for testing purposes.
+export function processErrors(errorData) {
+  let statements = [];
+  // Check if the 'errors' key exists and is an object.
+  if (
+    errorData &&
+    typeof errorData.errors === "object" &&
+    errorData.errors !== null
+  ) {
+    const validationErrors = errorData.errors;
+    // Apply the flatMap logic to the nested validationErrors object.
+    statements = Object.entries(validationErrors).flatMap(([key, messages]) => {
+      // Ensure 'messages' is actually an array before mapping.
+      if (Array.isArray(messages)) {
+        return messages.map((message) => `${key} ${message}`);
+      } else if (typeof messages === "string") {
+        // Handle case where value might be a single string.
+        return [`${key} ${messages}`];
+      }
+      console.warn(
+        `Expected array or string for key '${key}' inside 'errors', but got:`,
+        messages
+      );
+      return []; // Ignore if format is unexpected for this key.
+    });
+  } else if (errorData && typeof errorData.error === "string") {
+    statements.push(errorData.error);
+  } else if (
+    errorData &&
+    errorData.status &&
+    Array.isArray(errorData.status.errors) &&
+    // The errors object is nested within status for this particular error,
+    // so need to first call status to be able to access it.
+    errorData.status.errors[0] === "Username contains inappropriate language."
+  ) {
+    statements.push(errorData.status.errors[0]);
+  } else {
+    // Handle cases where the error format is unexpected (e.g., a simple
+    // string error).
+    console.error("Error format unexpected:", errorData);
+    statements = ["Sign-in failed. Please check your credentials."];
+  }
+
+  return statements;
+}
+
 export const MessengerContext = createContext();
 
 export const MessengerProvider = ({ children }) => {
@@ -48,52 +95,6 @@ export const MessengerProvider = ({ children }) => {
       console.error("Error toggling presence:", err);
     }
   };
-
-  // Normalize error messages into readable format.
-  function processErrors(errorData) {
-    let statements = [];
-    // Check if the 'errors' key exists and is an object.
-    if (
-      errorData &&
-      typeof errorData.errors === "object" &&
-      errorData.errors !== null
-    ) {
-      const validationErrors = errorData.errors;
-      // Apply the flatMap logic to the nested validationErrors object.
-      statements = Object.entries(validationErrors).flatMap(
-        ([key, messages]) => {
-          // Ensure 'messages' is actually an array before mapping.
-          if (Array.isArray(messages)) {
-            return messages.map((message) => `${key} ${message}`);
-          } else if (typeof messages === "string") {
-            // Handle case where value might be a single string.
-            return [`${key} ${messages}`];
-          }
-          console.warn(
-            `Expected array or string for key '${key}' inside 'errors', but got:`,
-            messages
-          );
-          return []; // Ignore if format is unexpected for this key.
-        }
-      );
-    } else if (errorData && typeof errorData.error === "string") {
-      statements.push(errorData.error);
-    } else if (
-      errorData &&
-      // The errors object is nested within status for this particular error,
-      // so need to first call status to be able to access it.
-      errorData.status.errors[0] === "Username contains inappropriate language."
-    ) {
-      statements.push(errorData.status.errors[0]);
-    } else {
-      // Handle cases where the error format is unexpected (e.g., a simple
-      // string error).
-      console.error("Error format unexpected:", errorData);
-      statements = ["Sign-in failed. Please check your credentials."];
-    }
-
-    return statements;
-  }
 
   return (
     <MessengerContext.Provider

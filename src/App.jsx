@@ -44,7 +44,7 @@ function App() {
     <div className="container-fluid d-flex flex-column p-0 m-0 min-vh-100">
       <main className="flex-grow-1 container-fluid d-flex flex-column">
         {!isAuthenticated ? (
-          /* If user is not authenticated, show the sign in view */
+          /* If user is not authenticated, show the sign in view. */
           <div
             className="d-flex flex-column align-items-center 
                           justify-content-evenly gap-3 mb-4 flex-grow-1"
@@ -56,7 +56,7 @@ function App() {
             </div>
           </div>
         ) : (
-          /* If user is authenticated, display username and log out button as header */
+          /* If user is authenticated, display username and log out button as header. */
           <div className="mb-4 flex-grow-1">
             <div className="d-flex gap-3 w-100 justify-content-end">
               <p className="mb-2">

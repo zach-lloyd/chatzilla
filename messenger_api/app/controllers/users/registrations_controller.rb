@@ -20,7 +20,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       build_resource(sign_up_params)
       resource.errors.add(:username, "contains inappropriate language.")
       
-      # Respond with the resource, which will now contain the error
+      # Respond with the resource, which will now contain the error.
       render json: { 
         status: { 
           code: 422, 
