@@ -97,13 +97,13 @@ describe("CreateRoomForm Component", () => {
     expect(mockHidePanel).toHaveBeenCalled();
   });
 
-  // Test 3: Test room creation.
-  test("user can successfully create a room", async () => {
-    const mockRoom = { id: 1, name: "Test Room" };
+  // Test 3: Test error handling.
+  test("component successfully displays errors", async () => {
+    const mockError = { error: "Unprocessable entity." };
 
     server.use(
       http.post("http://localhost:3000/rooms", () => {
-        return HttpResponse.json(mockRoom, { status: 201 });
+        return HttpResponse.json(mockError, { status: 422 });
       })
     );
 
@@ -123,8 +123,7 @@ describe("CreateRoomForm Component", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /create room/i }));
 
-    expect(mockNavigate).toHaveBeenCalledWith("/rooms/1");
-    expect(mockOnClose).toHaveBeenCalled();
-    expect(mockHidePanel).toHaveBeenCalled();
+    expect(window.alert).toHaveBeenCalled();
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });
