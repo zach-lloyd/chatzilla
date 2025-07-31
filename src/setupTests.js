@@ -21,12 +21,15 @@ Object.defineProperty(window, "matchMedia", {
 
 import { setupServer } from "msw/node";
 
-// Includes a default handler for GET /rooms request to silence warning about
-// lack of a matching request handler. If a test needs to access the actual room
-// list, I will need to override this using server.use().
+// Includes a default handler for GET /rooms and GET /users requests to silence
+// warning about lack of a matching request handler. If a test needs to access
+// the actual room list, I will need to override this using server.use().
 export const server = setupServer(
   http.get("http://localhost:3000/rooms", () => {
-    return HttpResponse.json([]); // Return an empty array by default.
+    return HttpResponse.json([]);
+  }),
+  http.get("http://localhost:3000/users", () => {
+    return HttpResponse.json([]);
   })
 );
 

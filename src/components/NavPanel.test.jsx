@@ -4,9 +4,6 @@ import { MemoryRouter } from "react-router-dom";
 import { MessengerContext } from "./MessengerContext";
 import NavPanel from "./NavPanel";
 
-const mockSetIsAuthenticated = vi.fn();
-const mockUpdateUser = vi.fn();
-const mockProcessErrors = vi.fn((errorData) => [errorData.error]);
 const mockTogglePresence = vi.fn();
 
 const renderWithProviders = (component, providerProps = {}) => {
@@ -14,9 +11,6 @@ const renderWithProviders = (component, providerProps = {}) => {
     <MessengerContext.Provider
       // Merge default mock values with any custom props for the test.
       value={{
-        setIsAuthenticated: mockSetIsAuthenticated,
-        updateUser: mockUpdateUser,
-        processErrors: mockProcessErrors,
         mockTogglePresence: mockTogglePresence,
         BASE_URL: "http://localhost:3000",
         csrfToken: "test-token",
@@ -92,7 +86,8 @@ describe("NavPanel Component", () => {
     ).toBeInTheDocument();
   });
 
-  test("User can toggle online visibility", async () => {
+  // Test 4: Test Create New Room button.
+  test("User can open form to create a new room", async () => {
     const mockUser = { username: "tester", presence: true };
 
     renderWithProviders(<NavPanel />, {

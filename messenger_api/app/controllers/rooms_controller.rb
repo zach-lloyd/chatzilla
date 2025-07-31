@@ -12,6 +12,18 @@ class RoomsController < ApplicationController
   end
 
   def create
+    name_is_profane = ProfanityChecker.new(room_params[:name]).profane?
+    description_is_profane = ProfanityChecker.new(room_params[:description]).profane?
+
+    if name_is_profane || description_is_profane
+      render json: { 
+        error: "Your room name or description contains inappropriate language " \
+               "and was not created." 
+      },
+             status: :unprocessable_entity
+      return
+    end
+
     # Build the room and assign the creator (current_user).
     @room = current_user.created_rooms.build(room_params)
 
