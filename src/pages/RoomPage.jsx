@@ -381,13 +381,7 @@ function RoomPage() {
             </button>
           </div>
         ) : (
-          !loading &&
-          room &&
-          !isMember && (
-            <button onClick={joinRoom} className="btn-monster">
-              Join Room
-            </button>
-          )
+          <></>
         )}
       </div>
 
@@ -402,7 +396,13 @@ function RoomPage() {
             Leave Room
           </button>
         ) : (
-          <></>
+          !loading &&
+          room &&
+          !isMember && (
+            <button onClick={joinRoom} className="btn-monster">
+              Join Room
+            </button>
+          )
         )}
 
         <hr />
