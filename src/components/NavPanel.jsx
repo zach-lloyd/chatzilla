@@ -58,7 +58,7 @@ function NavPanel() {
               className="rounded-circle me-2"
             />
             <h3 className="text-center align-self-center">
-              <strong>{user.username}</strong>
+              <strong>{user?.username}</strong>
             </h3>
           </Offcanvas.Title>
         </Offcanvas.Header>
