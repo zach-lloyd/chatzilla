@@ -30,7 +30,7 @@ const renderWithProviders = (
 
 describe("RequireAuth guard component", () => {
   // Test 1: Renders children for authenticated users.
-  test("renders children when isAuthenticated is true", async () => {
+  test("renders children when isAuthenticated is true", () => {
     const ProtectedComponent = () => <div>Protected Content</div>;
     const SignInPage = () => <h1>Sign In</h1>;
 
