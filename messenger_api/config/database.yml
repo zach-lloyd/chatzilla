@@ -19,7 +19,6 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-
 development:
   <<: *default
   database: messenger_api_development
@@ -79,20 +78,8 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
+  primary:
     <<: *default
-    database: messenger_api_production
-    username: messenger_api
-    password: <%= ENV["MESSENGER_API_DATABASE_PASSWORD"] %>
-  cache:
-    <<: *primary_production
-    database: messenger_api_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: messenger_api_production_queue
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    database: messenger_api_production_cable
-    migrations_paths: db/cable_migrate
+    # Render injects DATABASE_URL in build/run containers.
+    # Locally, ENV["DATABASE_URL"] is nil, which Rails ignores—no KeyError.
+    url: <%= ENV["DATABASE_URL"] %>
