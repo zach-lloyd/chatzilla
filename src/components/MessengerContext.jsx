@@ -51,7 +51,8 @@ export function processErrors(errorData) {
 export const MessengerContext = createContext();
 
 export const MessengerProvider = ({ children }) => {
-  const BASE_URL = "http://localhost:3000";
+  const BASE_URL =
+    "https://chatzilla-1ntu.onrender.com" || "http://localhost:3000";
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [csrfToken, setCsrfToken] = useState(null);
