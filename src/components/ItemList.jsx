@@ -9,7 +9,7 @@ function ItemList({ type }) {
   // Used to display a loading message if needed.
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { BASE_URL } = useContext(MessengerContext);
+  const { BASE_URL, csrfToken } = useContext(MessengerContext);
 
   // Get the applicable item list each time the type of items changes.
   useEffect(() => {
@@ -18,6 +18,10 @@ function ItemList({ type }) {
 
     fetch(`${BASE_URL}/${type}`, {
       credentials: "include",
+      headers: {
+        "X-CSRF-Token": csrfToken,
+        Accept: "application/json",
+      },
     })
       .then((response) => {
         if (!response.ok) {
@@ -51,12 +55,12 @@ function ItemList({ type }) {
             </Link>
           ))
         : type === "rooms"
-          ? items.map((room) => (
-              <Link key={room.id} to={`/rooms/${room.id}`}>
-                <li className="item-background ps-2">{room.name}</li>
-              </Link>
-            ))
-          : null}
+        ? items.map((room) => (
+            <Link key={room.id} to={`/rooms/${room.id}`}>
+              <li className="item-background ps-2">{room.name}</li>
+            </Link>
+          ))
+        : null}
     </ul>
   );
 }

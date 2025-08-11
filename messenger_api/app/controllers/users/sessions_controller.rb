@@ -2,6 +2,7 @@
 
 class Users::SessionsController < Devise::SessionsController
   before_action :set_cache_buster
+  skip_before_action :require_no_authentication, only: [:new, :create]
 
   include ActionController::Flash
   include ActionController::MimeResponds 
