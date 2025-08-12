@@ -30,7 +30,8 @@ module MessengerApi
     config.api_only = true
 
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore, key: '_chatzilla_session'
+    #config.middleware.use ActionDispatch::Session::CookieStore, key: '_chatzilla_session'
+    config.middleware.use ActionDispatch::Session::CookieStore
     config.middleware.use ActionDispatch::Flash
   end
 end

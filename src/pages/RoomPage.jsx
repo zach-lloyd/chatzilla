@@ -438,7 +438,7 @@ function RoomPage() {
             ))}
           </ul>
         ) : (
-          <p>Everyone’s online!</p>
+          <></>
         )}
       </div>
     </div>
