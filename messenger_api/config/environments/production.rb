@@ -78,6 +78,12 @@ Rails.application.configure do
   
   config.action_dispatch.cookies_same_site_protection = :none
 
+  config.action_cable.url = "wss://chatzilla-1ntu.onrender.com/cable"
+  config.action_cable.allowed_request_origins = [
+    "https://chatzilla-front-end.onrender.com",
+    "https://chatzilla-1ntu.onrender.com"
+  ]
+
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
