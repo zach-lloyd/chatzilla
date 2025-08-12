@@ -4,11 +4,12 @@
 # to make the web console appear.
 development:
   adapter: redis
-  # point at your local Redis; no ENV var needed here
   url: redis://localhost:6379/1
 
 test:
   adapter: test
 
 production:
-  adapter: async
+  adapter: redis
+  url: <%= ENV["REDIS_URL"] %>
+  channel_prefix: chatzilla_production
