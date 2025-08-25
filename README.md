@@ -45,4 +45,5 @@ Chatzilla is a realtime messaging app with a bit of oldschool chatroom flair tha
 <img width="1261" height="612" alt="Screenshot 2025-08-13 at 11 05 29 AM" src="https://github.com/user-attachments/assets/aaf3639f-2d10-4b49-805a-2b6d710ddaa9" />
 <img width="1253" height="619" alt="Screenshot 2025-08-13 at 11 06 15 AM" src="https://github.com/user-attachments/assets/7f66a281-d9e9-4482-94b0-56aa1d3a663f" />
 
-
+## License
+No license file is currently present. Treat this as all rights reserved unless a license is added. If you plan to fork/distribute, please open an issue to discuss.
